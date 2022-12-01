@@ -59,4 +59,29 @@ export const { onDragTool,onDropTool,onDragToolEnd ,setDragControlData, register
 
 export const selectCount = (state: RootState) => state.dragNDrop.tools;
 
+
+
+export const reduceTextInputDataState = (control: DropedControl, value: string): DropedControl => {
+  return {
+    ...control,
+    dataState: control.dataState ? {
+      label: 'label' in control.dataState ? control.dataState.label : '',
+      placeholder: 'placeholder' in control.dataState ? control.dataState.placeholder : '',
+      value
+    } : null
+  }
+}
+
+
+export const reduceImageUploaderDataState = (control: DropedControl, base64: string, fileType: string): DropedControl => {
+  return {
+    ...control,
+    dataState: control.dataState ? {
+      base64,
+      fileType
+    } : null
+  }
+}
+
+
 export default toolsDragDropSlice.reducer;

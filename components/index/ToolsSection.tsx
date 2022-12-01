@@ -29,7 +29,7 @@ const ToolItem_ = React.memo(({ tool,onDragTool,onDragToolEnd }: ToolsItemParams
         onDragToolEnd()
     }
 
-    const Icon = ToolIcons['Tool'+tool.id]
+    const Icon = ToolIcons[tool.id]
     return <>
         <div
             draggable

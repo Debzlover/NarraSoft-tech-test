@@ -1,7 +1,6 @@
 import { ReactElement, useCallback } from "react"
 import {DropedControl } from "../../helpers/types/index/dragNDropTypes"
-import { setDragControlData } from "../../redux/index/dragToolsSlice";
-import { reduceTextInputDataState } from "../../redux/index/initialData";
+import { reduceTextInputDataState, setDragControlData } from "../../redux/index/dragToolsSlice";
 import TextBox from "../generic/TextBox";
 
 

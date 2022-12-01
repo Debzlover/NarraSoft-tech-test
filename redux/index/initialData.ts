@@ -1,19 +1,22 @@
 import { ControlToolList, DropedControl } from "../../helpers/types/index/dragNDropTypes";
-import { BsInputCursorText,BsFillImageFill } from 'react-icons/Bs';
+import { BsInputCursorText, BsFillImageFill } from 'react-icons/Bs';
 import TextBox from "../../components/generic/TextBox";
 import ImageUploader from "../../components/generic/ImageUploader";
+import { ReactElement } from "react";
+import { IconType } from "react-icons";
 
 export const TextBoxToolId = 'n1';
 export const ImageUploaderToolId = 'n2';
 
-export const Components = {
-    ['Tool'+TextBoxToolId] : TextBox,
-    ['Tool'+ImageUploaderToolId] : ImageUploader,
+
+export const Components: { [key: string]: typeof TextBox | typeof ImageUploader } = {
+  [TextBoxToolId]: TextBox,
+  [ImageUploaderToolId]: ImageUploader,
 }
 
-export const ToolIcons = {
-    ['Tool'+TextBoxToolId] : BsInputCursorText,
-    ['Tool'+ImageUploaderToolId] : BsFillImageFill,
+export const ToolIcons: { [key: string]: IconType } = {
+  [TextBoxToolId]: BsInputCursorText,
+  [ImageUploaderToolId]: BsFillImageFill,
 }
 
 export const initialState: ControlToolList = {
@@ -32,25 +35,3 @@ export const initialState: ControlToolList = {
   newDroped: null
 };
 
-
-export const reduceTextInputDataState = (control: DropedControl, value:string):DropedControl => {
-  return {
-      ...control,
-      dataState: control.dataState ? {
-          label: 'label' in control.dataState ? control.dataState.label : '',
-          placeholder: 'placeholder' in control.dataState ? control.dataState.placeholder : '',
-          value
-      } : null
-  }
-}
-
-
-export const reduceImageUploaderDataState = (control: DropedControl, base64:string, fileType:string):DropedControl => {
-  return {
-    ...control,
-    dataState: control.dataState ? {
-        base64,
-        fileType
-    } : null
-}
-}

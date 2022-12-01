@@ -1,7 +1,6 @@
 import { ReactElement, useCallback } from "react"
 import {DropedControl } from "../../helpers/types/index/dragNDropTypes"
-import { setDragControlData } from "../../redux/index/dragToolsSlice";
-import { reduceImageUploaderDataState } from "../../redux/index/initialData";
+import { reduceImageUploaderDataState, setDragControlData } from "../../redux/index/dragToolsSlice";
 import ImageUploader from "../generic/ImageUploader";
 
 

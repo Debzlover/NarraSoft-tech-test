@@ -40,7 +40,7 @@ const DropSection = ({ dropedTools, onDropTool }: DropSectionParams): ReactEleme
             {
                 dropedTools.map((tool, index) => {
                     // const Component = connect(null,{setDragControlData})(Components['Tool'+tool.toolId])
-                    const Component = Components['Tool'+tool.toolId]
+                    const Component = Components[tool.toolId]
                     return <Component key={index} {...tool.dataState} />
                 })
             }
