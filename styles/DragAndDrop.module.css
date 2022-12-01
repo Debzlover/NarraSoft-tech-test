@@ -1,0 +1,18 @@
+
+.ImageFileUploaderContainer {
+    background-image: url(/assets/image/image-upload-placeholder.jpg);
+    background-size: cover;
+}
+
+
+.FadeIn { animation: fadeIn 1s; }
+@keyframes fadeIn {
+    0% { opacity: 0; }
+    100% { opacity: 1; }
+}
+
+.FadeOut { animation: fadeOut 1s; }
+@keyframes fadeOut {
+    0% { opacity: 1; }
+    100% { opacity: 0; }
+}
