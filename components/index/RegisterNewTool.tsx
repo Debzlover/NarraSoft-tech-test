@@ -6,7 +6,6 @@ import { ImageUploaderToolId, TextBoxToolId } from "../../redux/index/initialDat
 import { RootState } from "../../redux/store";
 import Button from "../generic/Button"
 import TextBox from "../generic/TextBox"
-import Modal from "./Modal"
 import {registerDropedTool} from '../../redux/index/dragToolsSlice'
 import ImageUploader from "../generic/ImageUploader";
 import { useModalContextState } from "../../helpers/context/modalContext";

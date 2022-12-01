@@ -31,22 +31,24 @@ const DropSection = ({ dropedTools, onDropTool }: DropSectionParams): ReactEleme
 
     console.log('DropSection render')
     return (
-        <div
-            className='w-full space-y-7 px-4 bg-white'
-            onDragOver={onDragOver}
-            onDrop={onDrop}
-        >
+        <>
             <RegisterNewTool />
-            {
-                dropedTools.map((tool, index) => {
-                    // const Component = connect(null,{setDragControlData})(Components['Tool'+tool.toolId])
-                    const Component = Components[tool.toolId]
-                    return <Component key={index} {...tool.dataState} />
-                })
-            }
-
-            
-        </div>
+            <div
+                className='w-full space-y-7 px-4 bg-white'
+                onDragOver={onDragOver}
+                onDrop={onDrop}
+            >
+                {
+                    dropedTools.map((tool, index) => {
+                        // const Component = connect(null,{setDragControlData})(Components['Tool'+tool.toolId])
+                        const Component = Components[tool.toolId]
+                        return <Component key={index} {...tool.dataState} />
+                    })
+                }
+                
+            </div>
+        </>
+        
     )
 }
 

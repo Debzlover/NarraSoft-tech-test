@@ -62,7 +62,7 @@ export const  ModalD = forwardRef(({title,children,show=false, onClose}:ModalPro
     return (
         <>
             {
-                showModal && <div className={classNames(["fixed top-0 left-0 w-full h-[100vh] bg-slate-400/90 m-0 flex justify-center items-center",{[styles.FadeIn]: showing,[styles.FadeOut]: !showing}])}>
+                showModal && <div className={classNames(["fixed z-10 top-0 left-0 w-full h-[100vh] bg-slate-400/90 m-0 flex justify-center items-center",{[styles.FadeIn]: showing,[styles.FadeOut]: !showing}])}>
                             <div className="w-[500px] h-[500px] bg-slate-200">
                                 <div className="border-b-2 p-3 bg-red-300 border-b-slate-500 w-[inherit] pb-2 text-sm relative flex font-bold">
                                     <span className="flex-1">{title}</span>
