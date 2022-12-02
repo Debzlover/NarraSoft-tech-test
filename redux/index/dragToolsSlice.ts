@@ -40,22 +40,30 @@ export const toolsDragDropSlice = createSlice({
        * register new tool only if its currently draged tool
        */
       if(state.newDroped){
-        state.dropedTools.push({
-          id: "random-"+Math.random()*1000,
+        const id = "random-"+Math.random()*1000
+        state.dropedTools[id] = {
+          id: id,
           toolId:state.newDroped.id,
           dataState:action.payload
-        })
+        }
         state.newDroped = null
       }
     },
 
+    clearDroped: (state) => {
+      /**
+       * register new tool only if its currently draged tool
+       */
+      state.newDroped = null
+    },
+
     setDragControlData: (state,action: PayloadAction<DropedControl>) => {
-      state.dropedTools = state.dropedTools.map(tool => tool.id == action.payload.id ? action.payload : tool)
+      state.dropedTools[action.payload.id] = action.payload
     },
   },
 });
 
-export const { onDragTool,onDropTool,onDragToolEnd ,setDragControlData, registerDropedTool} = toolsDragDropSlice.actions;
+export const { onDragTool,onDropTool,onDragToolEnd ,setDragControlData, registerDropedTool,clearDroped} = toolsDragDropSlice.actions;
 
 export const selectCount = (state: RootState) => state.dragNDrop.tools;
 

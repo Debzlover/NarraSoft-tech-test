@@ -26,11 +26,14 @@ export interface DropedControl {
 }
 
 
+export type DropToolList = {[key:string]: DropedControl}
+
+
 
 
 export interface ControlToolList {
     draged: ControlTool | null,
     tools: ControlTool[],
-    dropedTools: DropedControl[],
+    dropedTools: {[key:string]:DropedControl},
     newDroped:ControlTool | null,
 }

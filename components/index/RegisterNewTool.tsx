@@ -1,25 +1,25 @@
 import { useEffect } from "react";
 import { ReactElement, useState } from "react"
 import { connect } from "react-redux";
-import { ControlTool, DropedControlImageUploaderData, DropedControlTextInputData } from "../../helpers/types/index/dragNDropTypes";
+import { ControlTool, DropControlStateType, DropedControlImageUploaderData, DropedControlTextInputData } from "../../helpers/types/index/dragNDropTypes";
 import { ImageUploaderToolId, TextBoxToolId } from "../../redux/index/initialData";
 import { RootState } from "../../redux/store";
 import Button from "../generic/Button"
 import TextBox from "../generic/TextBox"
-import {registerDropedTool} from '../../redux/index/dragToolsSlice'
+import {registerDropedTool,clearDroped} from '../../redux/index/dragToolsSlice'
 import ImageUploader from "../generic/ImageUploader";
 import { useModalContextState } from "../../helpers/context/modalContext";
+import { useDropTools } from "../../helpers/context/dropedToolsContext";
 
 
 interface RegisterNewTextBoxModalParams {
     show?:boolean;
     newDroped:ControlTool | null,
-    registerDropedTool: typeof registerDropedTool
+    clearDroped: typeof clearDroped
 }
-type RegisterToolParam = DropedControlTextInputData | DropedControlImageUploaderData
 
 
-const NewFeildPropComp = ({registerTool}:{registerTool:(data:RegisterToolParam) => void}) => {
+const NewFeildPropComp = ({registerTool}:{registerTool:(data:DropControlStateType) => void}) => {
     const [field, setFieldData] = useState<DropedControlTextInputData>({
         label:'',
         placeholder:'',
@@ -46,7 +46,7 @@ const NewFeildPropComp = ({registerTool}:{registerTool:(data:RegisterToolParam) 
     )
 }
 
-const NewImageUploaderComp = ({registerTool}:{registerTool:(data:RegisterToolParam) => void}) => {
+const NewImageUploaderComp = ({registerTool}:{registerTool:(data:DropControlStateType) => void}) => {
     const [fileData, setFileData] = useState<DropedControlImageUploaderData>({
         base64: '',
         fileType: ''
@@ -67,15 +67,23 @@ const NewImageUploaderComp = ({registerTool}:{registerTool:(data:RegisterToolPar
     )
 }
 
-function RegisterNewTool({newDroped,registerDropedTool,show = false}:RegisterNewTextBoxModalParams):ReactElement|null {
+function RegisterNewTool({newDroped,clearDroped,show = false}:RegisterNewTextBoxModalParams):ReactElement|null {
     const {ModalD, modelRef} = useModalContextState()
-
+    const [,registerDropedTool] = useDropTools()
     const [modalTitle, setModalTitle] = useState('')
     const [showModal, setShowModal] = useState(show)
 
-    const registerTool = (data : RegisterToolParam) => {
-        registerDropedTool(data)
-        modelRef.current?.closeModal()
+    const registerTool = (data : DropControlStateType) => {
+        if(newDroped){
+            const id = "random-"+Math.random()*1000
+            registerDropedTool({
+                id: id,
+                toolId:newDroped.id,
+                dataState:data
+            })
+            clearDroped()
+            modelRef.current?.closeModal()
+        }
     }
 
     useEffect(() => {
@@ -87,7 +95,11 @@ function RegisterNewTool({newDroped,registerDropedTool,show = false}:RegisterNew
             setShowModal(true)
             setModalTitle("New Image Uploader")
         }
-        modelRef.current?.openModal()
+
+        if(newDroped)
+            modelRef.current?.openModal()
+        else 
+            modelRef.current?.closeModal()
     }, [newDroped])
 
     console.log('RegisterNewTool rerender',newDroped?.id)
@@ -108,4 +120,4 @@ function RegisterNewTool({newDroped,registerDropedTool,show = false}:RegisterNew
 
 export default connect((state:RootState) => ({
     newDroped : state.dragNDrop.newDroped,
-}),{registerDropedTool})(RegisterNewTool)
+}),{registerDropedTool,clearDroped})(RegisterNewTool)

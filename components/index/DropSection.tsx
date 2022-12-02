@@ -1,27 +1,31 @@
-import React, { DragEvent, ReactElement } from 'react'
+import React, { DragEvent, ReactElement, useMemo } from 'react'
 import { connect } from 'react-redux'
-import {  DropedControl } from '../../helpers/types/index/dragNDropTypes'
+import {  ControlTool, DropedControl } from '../../helpers/types/index/dragNDropTypes'
 import { RootState } from '../../redux/store'
-import { onDropTool } from '../../redux/index/dragToolsSlice'
+import { clearDroped,onDropTool,setDragControlData } from '../../redux/index/dragToolsSlice'
 import { Components} from '../../redux/index/initialData'
 import { useState } from 'react'
 import RegisterNewTool from './RegisterNewTool'
+import { useDropTools } from '../../helpers/context/dropedToolsContext'
 
 
 type onDropToolType = typeof onDropTool
 interface DropSectionParams {
-    dropedTools: DropedControl[],
+    // dropedTools: {[key:string]:DropedControl},
     onDropTool: onDropToolType,
-    // draged: ControlTool | null
 }
 
 
-const DropSection = ({ dropedTools, onDropTool }: DropSectionParams): ReactElement => {
-    const [showNewTextBoxRegForm, setShowTextBoxRegForm] = useState(false)
+const DropSection = ({onDropTool }: DropSectionParams): ReactElement => {
+    const [dropedTools] = useDropTools()
     const onDrop = (event:DragEvent) => {
         event.preventDefault()
         // console.log('onDrop')
         onDropTool()
+        // clearDroped()
+        // registerTool({
+
+        // })
     }
 
     const onDragOver = (event:DragEvent) => {
@@ -29,7 +33,8 @@ const DropSection = ({ dropedTools, onDropTool }: DropSectionParams): ReactEleme
         // console.log('onDragOver')
     }
 
-    console.log('DropSection render')
+
+    console.log('DropSection render',dropedTools)
     return (
         <>
             <RegisterNewTool />
@@ -39,10 +44,10 @@ const DropSection = ({ dropedTools, onDropTool }: DropSectionParams): ReactEleme
                 onDrop={onDrop}
             >
                 {
-                    dropedTools.map((tool, index) => {
-                        // const Component = connect(null,{setDragControlData})(Components['Tool'+tool.toolId])
-                        const Component = Components[tool.toolId]
-                        return <Component key={index} {...tool.dataState} />
+                    Object.values(dropedTools).map((tool, index) => {
+                        const Component = connect(null,{setDragControlData})(Components[tool.toolId])
+                        // const Component = Components[tool.toolId]
+                        return <Component key={index} id={tool.id} />
                     })
                 }
                 
@@ -54,6 +59,4 @@ const DropSection = ({ dropedTools, onDropTool }: DropSectionParams): ReactEleme
 
 
 
-export default connect((state: RootState) => ({
-    dropedTools: state.dragNDrop.dropedTools,
-}), { onDropTool })(DropSection)
+export default connect(null, { onDropTool })(DropSection)

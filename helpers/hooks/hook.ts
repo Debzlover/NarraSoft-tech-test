@@ -1,4 +1,6 @@
 import { ChangeEvent, useCallback, useEffect, useRef, useState } from "react"
+import { useSelector } from "react-redux"
+import { RootState } from "../../redux/store"
 
 export const useFileSelector = (defaultPath:string|undefined, fileType:string|undefined) => {
     const uploaderRef = useRef<HTMLInputElement|null>(null)
@@ -37,4 +39,11 @@ export const useFileSelector = (defaultPath:string|undefined, fileType:string|un
         selectFile,
         onFileSelected
     }
+}
+
+
+
+export const useDropToolSelector = (id:string) => {
+    const dropTool = useSelector((state:RootState) => state.dragNDrop.dropedTools[id])
+    return [dropTool]
 }
