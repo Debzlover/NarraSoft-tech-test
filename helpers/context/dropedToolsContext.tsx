@@ -15,12 +15,24 @@ export const useDropToolsContext = () => {
         Subscribers.current.forEach(callback => callback())
     },[])
 
-    const registerTool = useCallback((tool:DropedControl) => {
-        dropToolsRef.current![tool.id] = tool
+    const remove = useCallback((id:string) => {
+        if(!dropToolsRef.current)
+            dropToolsRef.current = {}
+        
+        delete dropToolsRef.current![id]
+        updateListReference()
+    },[])
+
+    const updateListReference  = () => {
         dropToolsRef.current = {...dropToolsRef.current}
         Subscribers.current.clear()
 
         ListSubscribers.current.forEach(callback => callback())
+    }
+
+    const registerTool = useCallback((tool:DropedControl) => {
+        dropToolsRef.current![tool.id] = tool
+        updateListReference()
     },[])
 
     const Subscribers =  useRef(new Set<() => void>())
@@ -40,7 +52,8 @@ export const useDropToolsContext = () => {
         set,
         subscribe,
         registerTool,
-        listSubscribe
+        listSubscribe,
+        remove
     }
 }
 
@@ -52,6 +65,7 @@ interface DropToolContextType {
     subscribe: (callback: () => void) => () => boolean;
     registerTool: (tool: DropedControl) => void;
     listSubscribe: (callback: () => void) => () => boolean;
+    remove: (id:string) => void;
 }
 
 const DropedToolContext = createContext<DropToolContextType>({} as DropToolContextType)
@@ -62,15 +76,20 @@ export const DropedToolProvider = ({children}:{children:ReactNode}) => {
     </DropedToolContext.Provider>
 }
 
-export const useDropToolSelector = (selector:(state:DropToolList) => DropedControl) : [DropedControl, (tool:DropedControl) => void] => {
+export const useDropToolSelector = (selector:(state:DropToolList) => DropedControl) : [DropedControl, (tool:DropedControl) => void, () => void] => {
     const context = useContext(DropedToolContext)
     const [toolData, setToolData] = useState<DropedControl>(selector(context.get()))
+
+    const remove = useCallback(() => {
+        context.remove(toolData.id)
+    }, [])
+
     useEffect(() => {
         context.subscribe(() => {
             setToolData(selector(context.get()))
         })
     },[])
-    return [toolData, context.set]
+    return [toolData, context.set, remove]
 }
 
 
